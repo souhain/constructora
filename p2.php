@@ -258,46 +258,45 @@ $result = mysqli_query($mysqli,"insert into unidad(id_unidad,unidad) values ('".
 
 //Actualizar
 if(isset($_POST['button'])){
-if(isset($_POST['TXT_Matricula'])){
+
 
       @$Nombre = $_POST['TXT_Nombre'];
       @$Matricula = $_POST['TXT_Matricula'];
      
-      if($Matricula == ""){
-        
-      }
+      if($Matricula == ""){}
       else
       {
-          $link = mysql_connect ('localhost','root','');
-          mysql_select_db('ch',$link);
+           $link = mysqli_connect ('localhost','root','','ch');
 
           //print("<br>Conectando con el servidor MySQL y con la BD...");
     
-          $resultado = mysql_query("select * from unidad where id_unidad='$Matricula' or unidad='$Matricula'");
+          $resultado = mysqli_query($link,"select * from unidad where id_unidad='$Matricula' or unidad='$Matricula'");
 
          // print("<br>Se realizo la consulta");
 
-            echo "<table >
+            print( "<table >
       <tr>
       <th><center>Id</center></th>
       <th><center>Unidad</center></th>
-      </tr>";
+      </tr>");
 
-          while($row=mysql_fetch_array($resultado))
+          while($row=mysqli_fetch_array($resultado))
           { 
-             echo "<tr>";
+              print ("<tr>");
              print('<td ><center><input size="10" name="TXT_Matricula" type="text" id="TXT_Matricula" value="'.$row['id_unidad'].'" /></center></td>');
                 
                print('<td><center><input size="10" name="TXT_Nombre" type="text" id="TXT_Nombre" value="'.$row['unidad'].'"/></center></td>');
 
-                echo "</tr>"; 
+               print ("</tr>"); 
           }
-          echo "</table>";
-            echo "<input type=\"submit\" name=\"button\" class=\"btn btn-success\" id=\"button\" value=\"Modificar\"/>";
+          print ("</table>");
+          print('<input type="submit" name="Modificar" class="btn btn-success col-xs-1" value="Modificar">');
+}
+
+}
 
 
-
-            if(isset($_POST['button'])){
+            if(isset($_POST['Modificar'])){
        
       $Matricula = $_POST['TXT_Matricula'];
       @$Nombre = $_POST['TXT_Nombre'];
@@ -312,28 +311,23 @@ if(isset($_POST['TXT_Matricula'])){
           id_unidad='$Matricula',
           unidad='$Nombre'
           where id_unidad='$Matricula'";
-          print("");
+          
         
-          $link = mysql_connect ('localhost','root','');
-          mysql_select_db('ch',$link);
+          $link = mysqli_connect ('localhost','root','','ch');
           //print("<br>Conectando con el servidor MySQL y con la BD...");
   
-          @mysql_query ($SQL);
+           @mysqli_query ($link,$SQL);
           //print("<br>Se ejecuto la sentencia SQL...");
   
-          $resultado = mysql_query("select * from unidad where id_unidad='$Matricula'");
+           $resultado = mysqli_query($link,"select * from unidad where id_unidad='$Matricula'");
           print("<br>Se realizo la Actualizacion");
-          while($row=mysql_fetch_array($resultado))
+          while($row=mysqli_fetch_array($resultado))
           { 
             print("<br>".$row['id_unidad']." - ".$row['unidad']);
           }
         }
       }
-      }
-     
-    }
-  } 
-
+    
 
 
   //eliminar

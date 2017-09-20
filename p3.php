@@ -212,16 +212,16 @@ if(isset($_POST['btn'])){
   if((empty($id) || empty($Nombre)))
   {
     echo '<script>alert("Campos vacios")</script> ';
-      echo "<script>location.href='p2.php'</script>";
+      echo "<script>location.href='p3.php'</script>";
   }
   else{
 
-$nuevo_id=mysqli_query($mysqli,"select*from unidad where id_unidad='$id'"); 
+$nuevo_id=mysqli_query($mysqli,"select*from tipo_utilizacion where id_tipo_utilizacion='$id'"); 
 
 if(mysqli_num_rows($nuevo_id)>0) 
 { 
       echo '<script>alert("Este id ya existe")</script> ';
-      echo "<script>location.href='p1.php'</script>";
+      echo "<script>location.href='p3.php'</script>";
 } 
 // ------------ Si no esta registrado el usuario continua el script 
 else 
@@ -229,17 +229,17 @@ else
 // ============================================== 
 // Comprobamos si el email esta registrado 
 
-$nuevo_unidad=mysqli_query($mysqli,"select*from unidad where unidad='$Nombre'"); 
+$nuevo_unidad=mysqli_query($mysqli,"select*from tipo_utilizacion where tipo_utilizacion='$Nombre'"); 
 
 if(mysqli_num_rows($nuevo_unidad)>0) 
 { 
-      echo '<script>alert("Esta unidad ya existe")</script> ';
-      echo "<script>location.href='p1.php'</script>";
+      echo '<script>alert("Esta tipo de utilizacion ya existe")</script> ';
+      echo "<script>location.href='p3.php'</script>";
 } 
 // ------------ Si no esta registrado el e-mail continua el script 
 else 
 { 
-$result = mysqli_query($mysqli,"insert into unidad(id_unidad,unidad) values ('".$id."','".$Nombre."')");  
+$result = mysqli_query($mysqli,"insert into tipo_utilizacion(id_tipo_utilizacion,tipo_utilizacion) values ('".$id."','".$Nombre."')");  
 
 // Confirmamos que el registro ha sido insertado con exito 
 
@@ -247,9 +247,9 @@ $result = mysqli_query($mysqli,"insert into unidad(id_unidad,unidad) values ('".
   
           //print("<br>Se realizo la consulta y el resultado es: ");
   
-  $resultado = mysqli_query($mysqli,"select * from unidad where 
-          (id_unidad='$id' and 
-           unidad='$Nombre')");
+  $resultado = mysqli_query($mysqli,"select * from tipo_utilizacion where 
+          (id_tipo_utilizacion='$id' and 
+           tipo_utilizacion='$Nombre')");
 
            echo "<table>
       <tr>
@@ -260,8 +260,8 @@ $result = mysqli_query($mysqli,"insert into unidad(id_unidad,unidad) values ('".
      while($row=mysqli_fetch_array($resultado))
         { 
           echo "<tr>";
-          echo "<td id='t1'><center>".$row["id_unidad"]."</center></td>";
-          echo "<td id='t2'><center>".$row["unidad"]."</center></td>";
+          echo "<td id='t1'><center>".$row["id_tipo_utilizacion"]."</center></td>";
+          echo "<td id='t2'><center>".$row["tipo_utilizacion"]."</center></td>";
            echo "</tr>";
         }
         echo "</table>";
@@ -274,7 +274,7 @@ $result = mysqli_query($mysqli,"insert into unidad(id_unidad,unidad) values ('".
 
 //Actualizar
 if(isset($_POST['button'])){
-if(isset($_POST['TXT_Matricula'])){
+
 
       @$Nombre = $_POST['TXT_Nombre'];
       @$Matricula = $_POST['TXT_Matricula'];
@@ -284,36 +284,37 @@ if(isset($_POST['TXT_Matricula'])){
       }
       else
       {
-          $link = mysql_connect ('localhost','root','');
-          mysql_select_db('ch',$link);
+          $link = mysqli_connect ('localhost','root','','ch');
 
           //print("<br>Conectando con el servidor MySQL y con la BD...");
     
-          $resultado = mysql_query("select * from unidad where id_unidad='$Matricula' or unidad='$Matricula'");
+          $resultado = mysqli_query($link,"select * from tipo_utilizacion where id_tipo_utilizacion='$Matricula' or tipo_utilizacion='$Matricula'");
 
          // print("<br>Se realizo la consulta");
 
-            echo "<table >
+           print( "<table >
       <tr>
       <th><center>Id</center></th>
       <th><center>Unidad</center></th>
-      </tr>";
+      </tr>");
 
-          while($row=mysql_fetch_array($resultado))
+           while($row=mysqli_fetch_array($resultado))
           { 
              echo "<tr>";
-             print('<td ><center><input size="10" name="TXT_Matricula" type="text" id="TXT_Matricula" value="'.$row['id_unidad'].'" /></center></td>');
+             print('<td ><center><input size="10" name="TXT_Matricula" type="text" id="TXT_Matricula" value="'.$row['id_tipo_utilizacion'].'" /></center></td>');
                 
-               print('<td><center><input size="10" name="TXT_Nombre" type="text" id="TXT_Nombre" value="'.$row['unidad'].'"/></center></td>');
+               print('<td><center><input size="10" name="TXT_Nombre" type="text" id="TXT_Nombre" value="'.$row['tipo_utilizacion'].'"/></center></td>');
 
-                echo "</tr>"; 
+                print ("</tr>");  
           }
-          echo "</table>";
-            echo "<input type=\"submit\" name=\"button\" class=\"btn btn-success\" id=\"button\" value=\"Modificar\"/>";
+           print ("</table>");
+          print('<input type="submit" name="Modificar" class="btn btn-success col-xs-1" value="Modificar">');
+}
+
+}
 
 
-
-            if(isset($_POST['button'])){
+        if(isset($_POST['Modificar'])){
        
       $Matricula = $_POST['TXT_Matricula'];
       @$Nombre = $_POST['TXT_Nombre'];
@@ -324,31 +325,30 @@ if(isset($_POST['TXT_Matricula'])){
       }
       else
       {             
-          $SQL = "update unidad set 
-          id_unidad='$Matricula',
-          unidad='$Nombre'
-          where id_unidad='$Matricula'";
-          print("");
+          $SQL = "update tipo_utilizacion set 
+          id_tipo_utilizacion='$Matricula',
+          tipo_utilizacion='$Nombre'
+          where id_tipo_utilizacion='$Matricula'";
         
-          $link = mysql_connect ('localhost','root','');
-          mysql_select_db('ch',$link);
+        
+           $link = mysqli_connect ('localhost','root','','ch');
           //print("<br>Conectando con el servidor MySQL y con la BD...");
   
-          @mysql_query ($SQL);
+         @mysqli_query ($link,$SQL);
           //print("<br>Se ejecuto la sentencia SQL...");
   
-          $resultado = mysql_query("select * from unidad where id_unidad='$Matricula'");
+          $resultado = mysqli_query($link,"select * from tipo_utilizacion where id_tipo_utilizacion='$Matricula'");
           print("<br>Se realizo la Actualizacion");
-          while($row=mysql_fetch_array($resultado))
+             while($row=mysqli_fetch_array($resultado))
           { 
-            print("<br>".$row['id_unidad']." - ".$row['unidad']);
+            print("<br>".$row['id_tipo_utilizacion']." - ".$row['tipo_utilizacion']);
           }
         }
       }
-      }
-     
-    }
-  } 
+ 
+
+
+
 
 
 
@@ -363,7 +363,7 @@ if(isset($_POST['delete'])){
       {
         include('conexion.php');
 
-          $SQL = "delete from unidad where id_unidad='$Eliminar'";
+          $SQL = "delete from tipo_utilizacion where id_tipo_utilizacion='$Eliminar'";
           //print("<br>SQL: ".$SQL);
         
          // print("<br>Conectando con el servidor MySQL y con la BD...");
@@ -371,12 +371,12 @@ if(isset($_POST['delete'])){
           @mysqli_query ($mysqli,$SQL);
           //print("<br>Se ejecuto la sentencia SQL...");
   
-          $resultado = mysqli_query($mysqli,"select * from responsable_obra where id_responsable_obra='$Eliminar'");
+          $resultado = mysqli_query($mysqli,"select * from tipo_utilizacion where id_tipo_utilizacion='$Eliminar'");
           print("<br>Se realizo la Eliminación");
           
           while($row=mysqli_fetch_array($resultado))
           { 
-            print("<br>".$row['id_responsable_obra']." - ".$row['nombre']."...");
+            print("<br>".$row['id_tipo_utilizacion']." - ".$row['tipo_utilizacion']."...");
           }
       } 
 }
