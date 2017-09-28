@@ -185,7 +185,7 @@
 <?php
 
 //INSERTAR
-/* if(isset($_POST['btn'])){ 
+if(isset($_POST['btn'])){ 
   include('conexion.php'); 
 
 // Configurar las dos lineas siguientes 
@@ -196,9 +196,7 @@
   $C_usuario=$_POST['contra_usuario'];
   $C_admin=$_POST['contra_admin'];
 
-// Inicio de validacion 
 
-// Fin de la validacion 
 
 // Comprobamos si el usuario esta registrado 
   if((empty($id) || empty($Nombre) || empty($Paterno) || empty($Materno)) || (empty($C_usuario) & empty($C_admin)))
@@ -227,7 +225,7 @@ if(mysqli_num_rows($nuevo_usuario)>0)
       echo '<script>alert("Este usuario ya esta registrado")</script> ';
       echo "<script>location.href='p1.php'</script>";
 } 
-// ------------ Si no esta registrado el e-mail continua el script 
+
 else 
 { 
 $result = mysqli_query($mysqli,"insert into responsable_obra(id_responsable_obra,nombre,apellido_paterno,apellido_materno,contra,contra_admin) values ('".$id."','".$Nombre."','".$Paterno."','".$Materno."','".$C_usuario."','".$C_admin."')");  
@@ -236,7 +234,7 @@ $result = mysqli_query($mysqli,"insert into responsable_obra(id_responsable_obra
 
           echo "<p class='avisos'>Registro insertado con exito</p>"; 
   
-          print("<br>Se realizo la consulta y el resultado es: ");
+          //print("<br>Se realizo la consulta y el resultado es: ");
   
   $resultado = mysqli_query($mysqli,"select * from responsable_obra where 
           (id_responsable_obra='$id' and 
@@ -282,82 +280,91 @@ $result = mysqli_query($mysqli,"insert into responsable_obra(id_responsable_obra
 
 //Actualizar
 if(isset($_POST['button'])){
-if(isset($_POST['TXT_Matricula'])){
 
-      @$Nombre = $_POST['TXT_Nombre'];
-      @$Paterno = $_POST['TXT_A_Paterno'];
-      @$Materno = $_POST['TXT_A_Materno'];
-      @$Matricula = $_POST['TXT_Matricula'];
-      @$Contra_admin = $_POST['Contra_admin'];       
-      @$Contra = $_POST['Contra'];
-      if($Matricula == ""){
-        
-      }
-      else
-      {
-          $link = mysql_connect ('localhost','root','');
-          mysql_select_db('ch',$link);
+    $id_res = $_POST['id_res'];
+  if($id_res == ""){}
+  else{
+     $link = mysqli_connect ('localhost','root','','ch');
+          //mysql_select_db('ch',$link);
 
-          print("<br>Conectando con el servidor MySQL y con la BD...");
+          //print("<br>Conectando con el servidor MySQL y con la BD...");
     
-          $resultado = mysql_query("select * from responsable_obra where id_responsable_obra='$Matricula' or nombre='$Matricula'");
+          $resultado = mysqli_query($link,"select * from responsable_obra where id_responsable_obra='$id_res' or nombre='$id_res'");
 
-          print("<br>Se realizo la consulta");
+         // print("<br>Se realizo la consulta");
 
-          while($row=mysql_fetch_array($resultado))
+            print( "<table >
+      <tr>
+      <th><center>Id usuario</center></th>
+      <th><center>Nombre</center></th>
+      <th><center>Apellido paterno</center></th>
+      <th><center>Apellido materno</center></th>
+      <th><center>contraseña Usuario</center></th>
+      <th><center>contraseña Administrador</center></th>
+      </tr>");
+
+          while($row=mysqli_fetch_array($resultado))
           { 
-             print('<input name="TXT_Matricula" type="text" id="TXT_Matricula" value="'.$row['id_responsable_obra'].'" />');
+             print ("<tr>");
+             print('<td ><center><input size="10" name="id_responsable" type="text"  value="'.$row['id_responsable_obra'].'" /></center></td>');
                 
-               print('<input name="TXT_Nombre" type="text" id="TXT_Nombre" size="50" maxlength="50" value="'.$row['nombre'].'"/>');
+               print('<td><center><input size="10" name="Nombre" type="text" value="'.$row['nombre'].'"/></center></td>');
 
-               print('<input name="TXT_A_Paterno" type="text" id="TXT_A_Paterno" size="50" maxlength="50" value="'.$row['apellido_paterno'].'"/>');
+               print('<td ><center><input size="10" name="APaterno" type="text"  value="'.$row['apellido_paterno'].'"/></center></td>');
               
-               print('<input name="TXT_A_Materno" type="text" id="TXT_A_Materno" size="50" maxlength="50" value="'.$row['apellido_materno'].'"/>'); 
+               print('<td><center><input size="10" name="AMaterno" type="text"  value="'.$row['apellido_materno'].'"/></center></td>'); 
 
 
-               print('<input name="Contra" type="text" id="Contra" size="50" maxlength="50" value="'.$row['contra'].'"/>'); 
+               print('<td><center><input size="10" name="Contraseña" type="text"  value="'.$row['contra'].'"/></center></td>'); 
 
 
-               print('<input name="Contra_admin" type="text" id="Contra_admin" size="50" maxlength="50" value="'.$row['contra_admin'].'"/>'); 
+               print('<td><center><input size="10" name="Contraseña_admin" type="text"  value="'.$row['contra_admin'].'"/></center></td>');
+                print ("</tr>"); 
           }
-            echo "<input type=\"submit\" name=\"button\" id=\"button\" value=\"Modificar\"/>";
+          print ("</table>");
 
 
-            if(isset($_POST['button'])){
-       @$Contra_admin = $_POST['Contra_admin'];       
-      @$Contra = $_POST['Contra'];
-      $Matricula = $_POST['TXT_Matricula'];
-      @$Nombre = $_POST['TXT_Nombre'];
-      @$Paterno = $_POST['TXT_A_Paterno'];
-      @$Materno = $_POST['TXT_A_Materno'];
 
-      print("<br>Se recibio: ".$Nombre);
-      
+print('<input type="submit" name="Modificar" class="btn btn-success col-xs-1" value="Modificar">');
+}
+
+}
+
+
+if(isset($_POST['Modificar'])) 
+{ 
+      @$Contra_admin = $_POST['Contraseña_admin'];       
+      @$Contra = $_POST['Contraseña'];
+      @$id_responsable = $_POST['id_responsable'];
+      @$Nombre = $_POST['Nombre'];
+      @$Paterno = $_POST['APaterno'];
+      @$Materno = $_POST['AMaterno'];
+
       if($Nombre == ""){
-        print("ERROR: Introduce un nombre primero...");
+        print("que esta pasando");
       }
       else
       {             
           $SQL = "update responsable_obra set 
-          id_responsable_obra='$Matricula',
+          id_responsable_obra='$id_responsable',
           nombre='$Nombre',
           apellido_paterno='$Paterno',
           apellido_materno='$Materno',
           contra='$Contra',
           contra_admin='$Contra_admin'
-          where id_responsable_obra='$Matricula'";
-          print("<br>SQL: ".$SQL);
+          where id_responsable_obra='$id_responsable'";
+          
         
-          $link = mysql_connect ('localhost','root','');
-          mysql_select_db('ch',$link);
-          print("<br>Conectando con el servidor MySQL y con la BD...");
+          $link = mysqli_connect ('localhost','root','','ch');
+          //mysql_select_db('ch',$link);
+          //print("<br>Conectando con el servidor MySQL y con la BD...");
   
-          @mysql_query ($SQL);
-          print("<br>Se ejecuto la sentencia SQL...");
+          @mysqli_query ($link,$SQL);
+          //print("<br>Se ejecuto la sentencia SQL...");
   
-          $resultado = mysql_query("select * from responsable_obra where id_responsable_obra='$Matricula'");
-          print("<br>Se realizo la consulta de Actualizacion");
-          while($row=mysql_fetch_array($resultado))
+          $resultado = mysqli_query($link,"select * from responsable_obra where id_responsable_obra='$id_responsable'");
+          print("<br>Se realizo la Actualizacion");
+          while($row=mysqli_fetch_array($resultado))
           { 
             print("<br>".$row['id_responsable_obra']." - ".$row['nombre']."-"
               .$row['apellido_paterno']." - ".$row['apellido_materno']."-"
@@ -365,10 +372,7 @@ if(isset($_POST['TXT_Matricula'])){
           }
         }
       }
-      }
-     
-    }
-  } 
+
 
 
 
@@ -376,7 +380,7 @@ if(isset($_POST['TXT_Matricula'])){
 if(isset($_POST['delete'])){
 
   $Eliminar = $_POST['eliminar'];
-      print("<br>Se recibio: ".$Eliminar);
+      //print("<br>Se recibio: ".$Eliminar);
       
       if($Eliminar == ""){}
       else
@@ -384,15 +388,15 @@ if(isset($_POST['delete'])){
         include('conexion.php');
 
           $SQL = "delete from responsable_obra where id_responsable_obra='$Eliminar'";
-          print("<br>SQL: ".$SQL);
+          //print("<br>SQL: ".$SQL);
         
-          print("<br>Conectando con el servidor MySQL y con la BD...");
+          //print("<br>Conectando con el servidor MySQL y con la BD...");
   
           @mysqli_query ($mysqli,$SQL);
-          print("<br>Se ejecuto la sentencia SQL...");
+          //print("<br>Se ejecuto la sentencia SQL...");
   
           $resultado = mysqli_query($mysqli,"select * from responsable_obra where id_responsable_obra='$Eliminar'");
-          print("<br>Se realizo la Eliminación de la Consulta");
+          print("<br>Se realizo la Eliminación");
           
           while($row=mysqli_fetch_array($resultado))
           { 
@@ -400,7 +404,7 @@ if(isset($_POST['delete'])){
           }
       } 
 }
-*/
+
 ?>
 
 

@@ -41,7 +41,7 @@ session_start();
 ob_start();
     if(isset($_SESSION['btn']))//Verifico que el boton "iniciar sesion" fue oprimido
     {
-      if ($_SESSION['usuario']  != 'admin') {
+      if ($_SESSION['usuario']  != 'usuario') {
        header('Location:usuario.php');
       }
     }
@@ -227,12 +227,12 @@ ob_start();
 
   
 <?php
-
+include('conexion.php'); 
 //Todos los usuarios
 if(isset($_POST['Usuarios'])){ 
-  include('conexion.php'); 
+ 
 
-$Usuarios=mysqli_query($mysqli,"select*from responsable_obra"); 
+$Usuarios=mysqli_query($con,"select*from responsable_obra"); 
   
            echo "<table>
       <tr>
@@ -262,7 +262,7 @@ $Usuarios=mysqli_query($mysqli,"select*from responsable_obra");
 
 //INSERTAR
 if(isset($_POST['btn'])){ 
-  include('conexion.php'); 
+  
 
 // Configurar las dos lineas siguientes 
   $id=$_POST['id'];
@@ -281,7 +281,7 @@ if(isset($_POST['btn'])){
       echo "<script>location.href='p1.php'</script>";
   }
   else{
-$nuevo_id=mysqli_query($mysqli,"select id_responsable_obra from responsable_obra where id_responsable_obra='$id'"); 
+$nuevo_id=mysqli_query($con,"select id_responsable_obra from responsable_obra where id_responsable_obra='$id'"); 
 
 if(mysqli_num_rows($nuevo_id)>0) 
 { 
@@ -294,7 +294,7 @@ else
 // ============================================== 
 // Comprobamos si el email esta registrado 
 
-$nuevo_usuario=mysqli_query($mysqli,"select nombre, apellido_paterno, apellido_materno from responsable_obra where nombre='$Nombre' and apellido_paterno= '$Paterno' and apellido_materno='$Materno'"); 
+$nuevo_usuario=mysqli_query($con,"select nombre, apellido_paterno, apellido_materno from responsable_obra where nombre='$Nombre' and apellido_paterno= '$Paterno' and apellido_materno='$Materno'"); 
 
 if(mysqli_num_rows($nuevo_usuario)>0) 
 { 
@@ -304,7 +304,7 @@ if(mysqli_num_rows($nuevo_usuario)>0)
 
 else 
 { 
-$result = mysqli_query($mysqli,"insert into responsable_obra(id_responsable_obra,nombre,apellido_paterno,apellido_materno,contra,contra_admin) values ('".$id."','".$Nombre."','".$Paterno."','".$Materno."','".$C_usuario."','".$C_admin."')");  
+$result = mysqli_query($con,"insert into responsable_obra(id_responsable_obra,nombre,apellido_paterno,apellido_materno,contra,contra_admin) values ('".$id."','".$Nombre."','".$Paterno."','".$Materno."','".$C_usuario."','".$C_admin."')");  
 
 // Confirmamos que el registro ha sido insertado con exito 
 
@@ -312,7 +312,7 @@ $result = mysqli_query($mysqli,"insert into responsable_obra(id_responsable_obra
   
           //print("<br>Se realizo la consulta y el resultado es: ");
   
-  $resultado = mysqli_query($mysqli,"select * from responsable_obra where 
+  $resultado = mysqli_query($con,"select * from responsable_obra where 
           (id_responsable_obra='$id' and 
            nombre='$Nombre' and 
            apellido_paterno='$Paterno' and 
@@ -461,17 +461,17 @@ if(isset($_POST['delete'])){
       if($Eliminar == ""){}
       else
       {
-        include('conexion.php');
+        
 
           $SQL = "delete from responsable_obra where id_responsable_obra='$Eliminar'";
           //print("<br>SQL: ".$SQL);
         
           //print("<br>Conectando con el servidor MySQL y con la BD...");
   
-          @mysqli_query ($mysqli,$SQL);
+          @mysqli_query ($con,$SQL);
           //print("<br>Se ejecuto la sentencia SQL...");
   
-          $resultado = mysqli_query($mysqli,"select * from responsable_obra where id_responsable_obra='$Eliminar'");
+          $resultado = mysqli_query($con,"select * from responsable_obra where id_responsable_obra='$Eliminar'");
           print("<br>Se realizo la Eliminación");
           
           while($row=mysqli_fetch_array($resultado))

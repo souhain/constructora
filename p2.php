@@ -159,7 +159,7 @@
 if(isset($_POST['unidad'])){ 
   include('conexion.php'); 
 
-$Usuarios=mysqli_query($mysqli,"select*from unidad"); 
+$Usuarios=mysqli_query($con,"select*from unidad"); 
   
            echo "<table>
       <tr>
@@ -200,7 +200,7 @@ if(isset($_POST['btn'])){
   }
   else{
 
-$nuevo_id=mysqli_query($mysqli,"select*from unidad where id_unidad='$id'"); 
+$nuevo_id=mysqli_query($con,"select*from unidad where id_unidad='$id'"); 
 
 if(mysqli_num_rows($nuevo_id)>0) 
 { 
@@ -213,7 +213,7 @@ else
 // ============================================== 
 // Comprobamos si el email esta registrado 
 
-$nuevo_unidad=mysqli_query($mysqli,"select*from unidad where unidad='$Nombre'"); 
+$nuevo_unidad=mysqli_query($con,"select*from unidad where unidad='$Nombre'"); 
 
 if(mysqli_num_rows($nuevo_unidad)>0) 
 { 
@@ -223,7 +223,7 @@ if(mysqli_num_rows($nuevo_unidad)>0)
 // ------------ Si no esta registrado el e-mail continua el script 
 else 
 { 
-$result = mysqli_query($mysqli,"insert into unidad(id_unidad,unidad) values ('".$id."','".$Nombre."')");  
+$result = mysqli_query($con,"insert into unidad(id_unidad,unidad) values ('".$id."','".$Nombre."')");  
 
 // Confirmamos que el registro ha sido insertado con exito 
 
@@ -231,7 +231,7 @@ $result = mysqli_query($mysqli,"insert into unidad(id_unidad,unidad) values ('".
   
           //print("<br>Se realizo la consulta y el resultado es: ");
   
-  $resultado = mysqli_query($mysqli,"select * from unidad where 
+  $resultado = mysqli_query($con,"select * from unidad where 
           (id_unidad='$id' and 
            unidad='$Nombre')");
 
@@ -346,10 +346,10 @@ if(isset($_POST['delete'])){
         
          // print("<br>Conectando con el servidor MySQL y con la BD...");
   
-          @mysqli_query ($mysqli,$SQL);
+          @mysqli_query ($con,$SQL);
           //print("<br>Se ejecuto la sentencia SQL...");
   
-          $resultado = mysqli_query($mysqli,"select * from responsable_obra where id_responsable_obra='$Eliminar'");
+          $resultado = mysqli_query($con,"select * from responsable_obra where id_responsable_obra='$Eliminar'");
           print("<br>Se realizo la Eliminación");
           
           while($row=mysqli_fetch_array($resultado))

@@ -175,7 +175,7 @@
 if(isset($_POST['utilizacion'])){ 
   include('conexion.php'); 
 
-$Usuarios=mysqli_query($mysqli,"select*from tipo_utilizacion"); 
+$Usuarios=mysqli_query($con,"select*from tipo_utilizacion"); 
   
            echo "<table>
       <tr>
@@ -216,7 +216,7 @@ if(isset($_POST['btn'])){
   }
   else{
 
-$nuevo_id=mysqli_query($mysqli,"select*from tipo_utilizacion where id_tipo_utilizacion='$id'"); 
+$nuevo_id=mysqli_query($con,"select*from tipo_utilizacion where id_tipo_utilizacion='$id'"); 
 
 if(mysqli_num_rows($nuevo_id)>0) 
 { 
@@ -229,7 +229,7 @@ else
 // ============================================== 
 // Comprobamos si el email esta registrado 
 
-$nuevo_unidad=mysqli_query($mysqli,"select*from tipo_utilizacion where tipo_utilizacion='$Nombre'"); 
+$nuevo_unidad=mysqli_query($con,"select*from tipo_utilizacion where tipo_utilizacion='$Nombre'"); 
 
 if(mysqli_num_rows($nuevo_unidad)>0) 
 { 
@@ -239,7 +239,7 @@ if(mysqli_num_rows($nuevo_unidad)>0)
 // ------------ Si no esta registrado el e-mail continua el script 
 else 
 { 
-$result = mysqli_query($mysqli,"insert into tipo_utilizacion(id_tipo_utilizacion,tipo_utilizacion) values ('".$id."','".$Nombre."')");  
+$result = mysqli_query($con,"insert into tipo_utilizacion(id_tipo_utilizacion,tipo_utilizacion) values ('".$id."','".$Nombre."')");  
 
 // Confirmamos que el registro ha sido insertado con exito 
 
@@ -247,7 +247,7 @@ $result = mysqli_query($mysqli,"insert into tipo_utilizacion(id_tipo_utilizacion
   
           //print("<br>Se realizo la consulta y el resultado es: ");
   
-  $resultado = mysqli_query($mysqli,"select * from tipo_utilizacion where 
+  $resultado = mysqli_query($con,"select * from tipo_utilizacion where 
           (id_tipo_utilizacion='$id' and 
            tipo_utilizacion='$Nombre')");
 
@@ -368,10 +368,10 @@ if(isset($_POST['delete'])){
         
          // print("<br>Conectando con el servidor MySQL y con la BD...");
   
-          @mysqli_query ($mysqli,$SQL);
+          @mysqli_query ($con,$SQL);
           //print("<br>Se ejecuto la sentencia SQL...");
   
-          $resultado = mysqli_query($mysqli,"select * from tipo_utilizacion where id_tipo_utilizacion='$Eliminar'");
+          $resultado = mysqli_query($con,"select * from tipo_utilizacion where id_tipo_utilizacion='$Eliminar'");
           print("<br>Se realizo la Eliminación");
           
           while($row=mysqli_fetch_array($resultado))
